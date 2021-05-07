@@ -61,7 +61,13 @@ app.post("/signin", (req, res) => {
 app.get("/auth", auth, (req, res) => {
   res.status(200).json({
     id: req.user
-    // admin
+  })
+})
+
+app.get('/signout', auth, (req, res) => {
+  res.clearCookie("user")
+  .json({
+    logoutSuccess: true
   })
 })
 
