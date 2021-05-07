@@ -3,7 +3,7 @@ const connection = require("../../connection");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const { auth } = require("../middleware/auth");
 app.get("/", (req, res) => {
   let sql = "ALTER TABLE emp MODIFY emp_no INT AUTO_INCREMENT";
   connection.query(sql, (err, result, fields) => {
@@ -55,9 +55,15 @@ app.post("/signin", (req, res) => {
         message: "비밀번호가 틀렸습니다"
       })
     }
-
-
   });
 })
+
+app.get("/auth", auth, (req, res) => {
+  res.status(200).json({
+    id: req.user
+    // admin
+  })
+})
+
 
 module.exports = app;
