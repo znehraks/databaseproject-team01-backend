@@ -18,16 +18,18 @@ app.post("/signup", (req, res) => {
   let userAccount = req.body;
 
   // 비밀번호 암호화
-  // bcrypt.genSalt(10, (err, salt) => {
-  //   if (err) return next(err);
-  //   bcrypt.hash(userAccount.emp_auth_pwd , salt, (err, hash) => {
-  //     if (err) return next(err);
-  //     userAccount.emp_auth_pwd = hash;
-  //     next();
-  //   });
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(userAccount.emp_auth_pwd , salt, (err, hash) => {
+      userAccount.emp_auth_pwd = hash;
+    });
+  });
+
   connection.query(sql, userAccount ,(err, result, fields) => {
     if (err) return res.json(err);
-    return res.send(result);
+    return res.json({
+      ...result,
+      pwd: userAccount.emp_auth_pwd
+    });
   });
 })
 
@@ -39,16 +41,16 @@ app.post("/signin", (req, res) => {
       loginSuccess: false,
       message: "ID에 해당하는 유저가 없습니다."
     })
-    if (user[0].emp_auth_pwd == req.body.emp_auth_pwd) {
+    const isSame = bcrypt.compareSync(req.body.emp_auth_pwd, user[0].emp_auth_pwd)
+    if (isSame) {
       // 로그인 성공 토큰 생성 추후 config로 암호화 필요
       let token = jwt.sign(user[0].emp_auth_id, 'secretToken')
       res.cookie("user", token)
       .status(200)
       .json({
         loginSuccess : true,
-        userId: user[0].emp_auth_id
+        userId: user[0].emp_auth_id,
       })
-      
     } else {
       return res.json({
         loginSuccess: false,
