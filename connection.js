@@ -4,12 +4,11 @@ const conf = JSON.parse(data);
 const mysql = require("mysql");
 
 const pool = mysql.createPool({
-  host: conf.host,
-  user: conf.user,
-  password: conf.password,
-  port: conf.port,
-  database: conf.database,
-  connectionLimit: 50,
+  host: "dbproject.c12pm8whu2kc.ap-northeast-2.rds.amazonaws.com",
+  user: "admin",
+  password: "12345678",
+  port: "3306",
+  database: "dbproject"
 });
 
 module.exports = pool;

@@ -12,5 +12,7 @@ app.get("/:project_no", (req, res) => {
     console.log(err);
   });
 });
+//참여 중인 프로젝트 조회 4가지
+//
 
 module.exports = app;
