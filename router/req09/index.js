@@ -2,7 +2,8 @@ const express = require("express");
 const connection = require("../../connection");
 const app = express();
 
-//전체조회
+// 9. 일반 직원이 본인이 현재 참여하고 있는 프로젝트에 대한 보고를 위해 해당 프로젝트
+// 의 PM, PL을 조회하는 기능
 app.get("/:emp_no", (req, res) => {
   let sql = `
   SELECT * FROM emp e
