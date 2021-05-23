@@ -71,7 +71,7 @@ app.delete('/department/:dept_id/delete',((req, res) => {
 app.post('/position/add', (req, res) => {
     const{name} = req.body;
     let sql = `INSERT INTO position(role_name) values(${name})`;
-    connection.query(sql, params, (err, result) => {
+    connection.query(sql,(err, result) => {
         if(err){
             throw err;
             res.redirect('/');
@@ -96,6 +96,54 @@ app.put('/position/:role_id/edit',((req, res) => {
 app.delete('/position/:role_id/delete',((req, res) => {
     let params = [req.params.role_id];
     let sql = "delete FROM position where role_id = ?";
+    connection.query(sql, params, (err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+}));
+//발주처 전체 조회
+app.post('/', (req, res) => {
+    let sql = "SELECT * FROM client";
+    connection.query(sql,(err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//발주처 등록
+app.post('/add', (req, res) => {
+    const{client_name} = req.body;
+    let sql = `INSERT INTO client(client_name) values(${client_name})`;
+    connection.query(sql,(err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//발주처 수정
+app.put('/:client_id/edit',((req, res) => {
+    const {client_name} = req.body;
+    let params = [req.params.client_id];
+    let sql = `update client set role_name = ${client_name} where client_id = ?`;
+    connection.query(sql, params, (err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+}));
+//발주처 삭제
+app.delete('/:client_id/delete',((req, res) => {
+    let params = [req.params.client_id_id];
+    let sql = "delete FROM client where client_id = ?";
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
