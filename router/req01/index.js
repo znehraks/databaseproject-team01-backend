@@ -105,7 +105,7 @@ app.delete('/position/:role_id/delete',((req, res) => {
     });
 }));
 //발주처 전체 조회
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
     let sql = "SELECT * FROM client";
     connection.query(sql,(err, result) => {
         if(err){
@@ -128,10 +128,10 @@ app.post('/add', (req, res) => {
     });
 });
 //발주처 수정
-app.put('/:client_id/edit',((req, res) => {
+app.put('/:client_no/edit',((req, res) => {
     const {client_name} = req.body;
-    let params = [req.params.client_id];
-    let sql = `update client set role_name = ${client_name} where client_id = ?`;
+    let params = [req.params.client_no];
+    let sql = `update client set client_name = ${client_name} where client_no = ?`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -141,9 +141,58 @@ app.put('/:client_id/edit',((req, res) => {
     });
 }));
 //발주처 삭제
-app.delete('/:client_id/delete',((req, res) => {
-    let params = [req.params.client_id_id];
-    let sql = "delete FROM client where client_id = ?";
+app.delete('/:client_no/delete',((req, res) => {
+    let params = [req.params.client_no];
+    let sql = "delete FROM client where client_no = ?";
+    connection.query(sql, params, (err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+}));
+//직원 권한 관련 라우터들(수정일자의 경우 DB에서 설정으로 되어있다는 전제임)
+//직원등급
+app.get('/', (req, res) => {
+    let sql = "SELECT * FROM emp_grage";
+    connection.query(sql,(err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//등급 등록
+app.post('/add', (req, res) => {
+    const{emp_rank_name, modify_access, read_access} = req.body;
+    let sql = `INSERT INTO emp_grage(emp_rank_name, modify_access, read_access) values(${emp_rank_name},${modify_access},${read_access})`;
+    connection.query(sql,(err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//등급 수정
+app.put('/:emp_rank_no/edit',((req, res) => {
+    const {emp_rank_name, modify_access, read_access} = req.body;
+    let params = [req.params.emp_rank_no];
+    let sql = `update emp_grade set emp_rank_name = ${emp_rank_name} where emp_rank_no = ?`;
+    connection.query(sql, params, (err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+}));
+//등급 삭제
+app.delete('/:emp_rank_no/delete',((req, res) => {
+    let params = [req.params.emp_rank_no];
+    let sql = "delete FROM emp_grade where emp_rank_no = ?";
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
