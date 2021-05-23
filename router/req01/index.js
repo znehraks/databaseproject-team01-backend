@@ -1,4 +1,7 @@
 //부서전체조회
+const express = require("express");
+const connection = require("../../connection");
+const app = express();
 app.get("/", (req, res) => {
     let sql = "SELECT * FROM department";
     connection.query(sql, (err, rows, fields) => {
@@ -104,3 +107,5 @@ app.delete('/position/:role_id/delete',((req, res) => {
         res.redirect('/');
     });
 }));
+
+module.exports = app;
