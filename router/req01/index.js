@@ -1,4 +1,7 @@
 //부서전체조회
+const express = require("express");
+const connection = require("../../connection");
+const app = express();
 app.get("/", (req, res) => {
     let sql = "SELECT * FROM department";
     connection.query(sql, (err, rows, fields) => {
@@ -71,7 +74,7 @@ app.delete('/department/:dept_id/delete',((req, res) => {
 app.post('/position/add', (req, res) => {
     const{name} = req.body;
     let sql = `INSERT INTO position(role_name) values(${name})`;
-    connection.query(sql,(err, result) => {
+    connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
             res.redirect('/');
@@ -201,3 +204,5 @@ app.delete('/:emp_rank_no/delete',((req, res) => {
         res.redirect('/');
     });
 }));
+
+module.exports = app;
