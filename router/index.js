@@ -8,6 +8,8 @@ const empInProject = require("./emp_in_project");
 const req06 = require("./req06");
 const req01 = require("./req01");
 const req02 = require("./req02");
+const req07 = require("./req07");
+const req08 = require("./req08");
 const app = express();
 
 app.get("/", (req, res) => {
@@ -23,5 +25,7 @@ router.use("/api/employee_in_project", empInProject);
 router.use("/api/req01", req01);
 router.use("/api/req02", req02);
 router.use("/api/req06", req06);
+router.use("/api/req07", req07);
+router.use("/api/req08", req08);
 
 module.exports = router;

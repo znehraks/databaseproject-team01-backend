@@ -7,39 +7,56 @@ const app = express();
 // 젝트를 정렬하는 기능(이때의 프로젝트는 열람가능기간이 안 지난 프로젝트를 의미)
 
 //최근 참여한 프로젝트 기준 정렬
-app.get("/recent_project", (req, res) => {
+app.get("/", (req, res) => {
   let sql = `
-    SELECT * FROM project p INNER JOIN employee_in_project eip
-    ON p.project_no = eip.project_no WHERE emp_no = 2 ORDER BY enter_date DESC))`;
-  connection.query(sql, (err, rows, fields) => {
+    SELECT * FROM project p INNER JOIN employee_in_project eip ON p.project_no = eip.project_no ORDER BY enter_date DESC`;
+  let params = [req.params.emp_no];
+  connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
   });
 });
 
-app.get("/ago_project", (req, res) => {
+app.get("/recent_project/:emp_no", (req, res) => {
   let sql = `
-    SELECT * FROM project p INNER JOIN employee_in_project eip
-    ON p.project_no = eip.project_no WHERE emp_no = 2 ORDER BY enter_date))`;
-  connection.query(sql, (err, rows, fields) => {
+    SELECT * FROM project p INNER JOIN employee_in_project eip ON p.project_no = eip.project_no WHERE emp_no = ? ORDER BY enter_date DESC`;
+  let params = [req.params.emp_no];
+  connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
   });
 });
 
-app.get("/imminent_project", (req, res) => {
+app.get("/ago_project/:emp_no", (req, res) => {
   let sql = `
     SELECT * FROM project p INNER JOIN employee_in_project eip
-    ON p.project_no = eip.project_no WHERE emp_no = 2 ORDER BY project_enddate desc))`;
-  connection.query(sql, (err, rows, fields) => {
+    ON p.project_no = eip.project_no WHERE emp_no = ? ORDER BY enter_date`;
+  let params = [req.params.emp_no];
+  connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
   });
 });
 
-app.get("/longtime_project", (req, res) => {
+app.get("/imminent_project/:emp_no", (req, res) => {
   let sql = `
     SELECT * FROM project p INNER JOIN employee_in_project eip
-    ON p.project_no = eip.project_no WHERE emp_no = 2 ORDER BY finish_date-enter_date desc))`;
-  connection.query(sql, (err, rows, fields) => {
+    ON p.project_no = eip.project_no WHERE emp_no = ? ORDER BY project_enddate desc`;
+  let params = [req.params.emp_no];
+  connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
+  });
+});
+
+app.get("/longtime_project/:emp_no", (req, res) => {
+  let sql = `
+    SELECT * FROM project p INNER JOIN employee_in_project eip
+    ON p.project_no = eip.project_no WHERE emp_no = ? ORDER BY finish_date-enter_date desc`;
+  let params = [req.params.emp_no];
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
+    console.log(err);
   });
 });
 
