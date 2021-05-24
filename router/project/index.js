@@ -5,7 +5,7 @@ const app = express();
 //전체조회
 app.get("/", (req, res) => {
   let sql =
-    "SELECT * FROM project INNER JOIN client ON project.client_no = client.client_no";
+    "SELECT * FROM project INNER JOIN client ON project.client_no = client.client_no where project.is_deleted = 0";
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
