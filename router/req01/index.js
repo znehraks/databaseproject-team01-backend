@@ -71,10 +71,10 @@ app.delete('/department/:dept_id/delete',((req, res) => {
     });
 }));
 //직무등록
-app.post('/position/add', (req, res) => {
+app.post('/task/add', (req, res) => {
     const{name} = req.body;
-    let sql = `INSERT INTO position(role_name) values(${name})`;
-    connection.query(sql, params, (err, result) => {
+    let sql = `INSERT INTO position(role_name, updated_at) values(${name}, curdate())`;
+    connection.query(sql,(err, result) => {
         if(err){
             throw err;
             res.redirect('/');
@@ -83,10 +83,10 @@ app.post('/position/add', (req, res) => {
     });
 });
 //직무수정
-app.put('/position/:role_id/edit',((req, res) => {
+app.put('/task/:role_id/edit',((req, res) => {
     const {name} = req.body;
     let params = [req.params.role_id];
-    let sql = `update position set role_name = ${name} where role_id = ?`;
+    let sql = `update position set role_name = ${name}, updated_at = curdate() where role_id = ?`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -121,7 +121,7 @@ app.get('/', (req, res) => {
 //발주처 등록
 app.post('/add', (req, res) => {
     const{client_name} = req.body;
-    let sql = `INSERT INTO client(client_name) values(${client_name})`;
+    let sql = `INSERT INTO client(client_name, updated_at) values(${client_name}, curdate())`;
     connection.query(sql,(err, result) => {
         if(err){
             throw err;
@@ -134,7 +134,7 @@ app.post('/add', (req, res) => {
 app.put('/:client_no/edit',((req, res) => {
     const {client_name} = req.body;
     let params = [req.params.client_no];
-    let sql = `update client set client_name = ${client_name} where client_no = ?`;
+    let sql = `update client set client_name = ${client_name}, updated_at = curdate() where client_no = ?`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -170,7 +170,7 @@ app.get('/', (req, res) => {
 //등급 등록
 app.post('/add', (req, res) => {
     const{emp_rank_name, modify_access, read_access} = req.body;
-    let sql = `INSERT INTO emp_grage(emp_rank_name, modify_access, read_access) values(${emp_rank_name},${modify_access},${read_access})`;
+    let sql = `INSERT INTO emp_grage(emp_rank_name, modify_access, read_access, updated_at) values(${emp_rank_name},${modify_access},${read_access}, curdate())`;
     connection.query(sql,(err, result) => {
         if(err){
             throw err;
@@ -183,7 +183,7 @@ app.post('/add', (req, res) => {
 app.put('/:emp_rank_no/edit',((req, res) => {
     const {emp_rank_name, modify_access, read_access} = req.body;
     let params = [req.params.emp_rank_no];
-    let sql = `update emp_grade set emp_rank_name = ${emp_rank_name} where emp_rank_no = ?`;
+    let sql = `update emp_grade set emp_rank_name = ${emp_rank_name}, modify_access = ${modify_access}, read_access = ${read_access}  where emp_rank_no = ?`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -204,5 +204,43 @@ app.delete('/:emp_rank_no/delete',((req, res) => {
         res.redirect('/');
     });
 }));
-
+//프로젝트 등록
+app.post('/add', (req, res) => {
+    const{project_name, project_startdate, project_enddate, client_no, storage_period} = req.body;
+    let sql = `INSERT INTO PROJECT(project_name, project_startdate, project_enddate, client_no, storage_period, updated_at) VALUES(${project_name}, ${project_startdate}, ${project_enddate}, ${client_no}, ${storage_period}, curdate()) WHERE EXISTS(SELECT * FROM client WHERE client_no = ${client_no})`;
+    connection.query(sql,(err, result) => {
+        if(err){
+            throw err;
+            alert('발주처 정보를 확인하세요')
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//프로젝트 삭제
+app.delete('/:project_no/add', (req, res) => {
+    let params = [req.params.project_no];
+    let sql = `delete from project where project_no = ?`;
+    connection.query(sql,params, (err, result) => {
+        if(err){
+            throw err;
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
+//프로젝트 수정
+app.post('/:project_no/edit', (req, res) => {
+    const{project_name, project_startdate, project_enddate, client_no, storage_period} = req.body;
+    let params = [req.params.project_no];
+    let sql = `update project set project_name = ${project_name}, project_startdate = ${project_startdate}, project_enddate = ${project_enddate}, client_no = ${client_no}, storage_period = ${storage_period}, updated_at = curdate() where project_no = ? and EXISTS(SELECT * FROM client WHERE client = ${client_no})`;
+    connection.query(sql,params, (err, result) => {
+        if(err){
+            throw err;
+            alert('발주처 정보를 확인하세요')
+            res.redirect('/');
+        }
+        res.redirect('/');
+    });
+});
 module.exports = app;
