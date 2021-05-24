@@ -71,9 +71,9 @@ app.delete('/department/:dept_id/delete',((req, res) => {
     });
 }));
 //직무등록
-app.post('/position/add', (req, res) => {
+app.post('/task/add', (req, res) => {
     const{name} = req.body;
-    let sql = `INSERT INTO position(role_name) values(${name})`;
+    let sql = `INSERT INTO task(role_name) values(${name})`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -83,10 +83,10 @@ app.post('/position/add', (req, res) => {
     });
 });
 //직무수정
-app.put('/position/:role_id/edit',((req, res) => {
+app.put('/task/:role_id/edit',((req, res) => {
     const {name} = req.body;
     let params = [req.params.role_id];
-    let sql = `update position set role_name = ${name} where role_id = ?`;
+    let sql = `update task set role_name = ${name} where role_id = ?`;
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
@@ -96,9 +96,9 @@ app.put('/position/:role_id/edit',((req, res) => {
     });
 }));
 //직무삭제
-app.delete('/position/:role_id/delete',((req, res) => {
+app.delete('/task/:role_id/delete',((req, res) => {
     let params = [req.params.role_id];
-    let sql = "delete FROM position where role_id = ?";
+    let sql = "delete FROM task where role_id = ?";
     connection.query(sql, params, (err, result) => {
         if(err){
             throw err;
