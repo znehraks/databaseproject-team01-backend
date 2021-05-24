@@ -4,9 +4,10 @@ const app = express();
 
 //전체조회
 app.get("/", (req, res) => {
-  let sql = "SELECT * FROM emp";
+  let sql = "SELECT * FROM emp where is_deleted = 0";
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
   });
 });
 

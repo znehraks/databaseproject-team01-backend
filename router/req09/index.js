@@ -15,6 +15,7 @@ app.get("/:emp_no", (req, res) => {
   WHERE pp.role_no <> 3`;
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
+    console.log(err);
   });
 });
 

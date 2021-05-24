@@ -10,6 +10,7 @@ app.get("/", (req, res) => {
   (a.salary + 0.05 * (SELECT SUM(hr_change) FROM performance_evaluation_resume b GROUP BY b.emp_no HAVING b.emp_no = a.emp_no))`;
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
+    console.log(err, "req10");
   });
 });
 
