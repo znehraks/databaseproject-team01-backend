@@ -1,8 +1,15 @@
-app.get("/:emp_no/client", (req, res) => {
-    let params = [req.params.emp_no];
-    let sql = `"SELECT client.client_no, client.client_name FROM EMP INNER JOIN employee_in_project ON EMP.emp_no = employee_in_project.emp_no INNER JOIN project ON employee_in_project.project_no = project.no INNER JOIN client on client.client_no = project.client_no INNER JOIN project_position ON project.project_no = project_position.project_no and project_position.emp_no = emp.emp_no INNER JOIN task on project_position.role_no = task.role_no WHERE task.role_no = "PM" and emp.emp_no = ${req.params.emp_no}"`;
-    connection.query(sql,params, (err, rows, fields) => {
-        res.send(rows);
-        console.log(err);
-    });
+const express = require("express");
+const connection = require("../../connection");
+const app = express();
+
+app.get("/", (req, res) => {
+  let sql = `SELECT * FROM client C INNER JOIN project P ON C.client_no = P.client_no
+    INNER JOIN project_position PP ON P.project_no = PP.project_no
+    WHERE role_no = 1 AND emp_no = ${req.params.emp_no};`;
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+    console.log(err);
+  });
 });
+
+module.exports = app;
