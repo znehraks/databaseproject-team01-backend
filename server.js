@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const app = express();
 const path = require("path");
-const port = 3002;
+const port = process.env.PORT || 3002;
 const multer = require("multer");
 const router = require("./router");
 const connection = require("./connection");
@@ -19,7 +20,6 @@ app.use(function (req, res, next) {
 });
 
 // setup the logger
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
