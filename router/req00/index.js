@@ -14,7 +14,7 @@ app.get("/emp", (req, res) => {
 });
 //insert
 app.post("/emp/insert", (req, res) => {
-  let sql = `INSERT INTO emp(emp_name, emp_rrn, emp_final_edu, emp_rank_no, dept_no, emp_manager_no, salary, updated_at) values('${req.body.emp_name}',${req.body.emp_rrn},'${req.body.emp_final_edu}',${req.body.emp_rank_no},${req.body.dept_no},${req.body.emp_manager_no},${req.body.salary},now())`;
+  let sql = `INSERT INTO emp(emp_name, emp_rrn, emp_final_edu, emp_rank_no, dept_no, emp_manager_no, salary, updated_at) values('${req.body.emp_name}','${req.body.emp_rrn}','${req.body.emp_final_edu}',${req.body.emp_rank_no},${req.body.dept_no},${req.body.emp_manager_no},${req.body.salary},now())`;
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
     console.log(err);

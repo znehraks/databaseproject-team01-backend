@@ -4,7 +4,7 @@ const app = express();
 
 //전체조회
 app.get("/", (req, res) => {
-  let sql = `SELECT * FROM emp e INNER JOIN employee_grade eg ON e.emp_rank_no = eg.emp_rank_no INNER JOIN department d ON d.dept_no = e.dept_no INNER JOIN performance_evaluation_resume per ON per.hr_score_history_no = e.hr_score_history_no WHERE e.is_deleted = 0`;
+  let sql = `SELECT * FROM emp e INNER JOIN employee_grade eg ON e.emp_rank_no = eg.emp_rank_no INNER JOIN department d ON d.dept_no = e.dept_no  WHERE e.is_deleted = 0 order by e.emp_no`;
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
     console.log(err);
