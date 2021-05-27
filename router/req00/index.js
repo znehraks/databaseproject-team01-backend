@@ -50,7 +50,7 @@ app.get("/employee_in_project", (req, res) => {
 });
 //insert
 app.post("/employee_in_project/insert", (req, res) => {
-  let sql = `INSERT INTO employee_in_project(project_no, emp_no,  updated_at) values (${req.body.project_no},${req.body.finish_reason},now())`;
+  let sql = `INSERT INTO employee_in_project(project_no, emp_no,  updated_at) values (${req.body.project_no},${req.body.emp_no},now())`;
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
     console.log(err);

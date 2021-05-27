@@ -47,10 +47,11 @@ app.get("/by_salary_rank1/employee", (req, res) => {
 app.post("/department/add", (req, res) => {
   const { name } = req.body;
   let sql = `INSERT INTO department(dept_name) values('${name}')`;
-  connection.query(sql, params, (err, result) => {
+  connection.query(sql, (err, result) => {
     if (err) {
       console.log(err);
     }
+    console.log(err);
     res.send(result);
   });
 });
