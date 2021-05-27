@@ -32,7 +32,7 @@ app.post("/signup", (req, res) => {
   // });
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(req.body.emp_auth_pwd, salt, (err, hash) => {
-      let sql = `INSERT INTO emp_online_account (emp_auth_id, emp_auth_pwd)values('${req.body.emp_auth_id}','${hash}')`;
+      let sql = `INSERT INTO emp_online_account (emp_no,emp_auth_id, emp_auth_pwd)values('${req.body.emp_no}','${req.body.emp_auth_id}','${hash}')`;
       connection.query(sql, (err, rows, fields) => {
         res.send(rows);
         console.log(err);
@@ -42,7 +42,8 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  let sql = "SELECT * FROM emp_online_account WHERE emp_auth_id = ?";
+  let sql =
+    "SELECT * FROM emp_online_account eoa INNER JOIN emp e ON eoa.emp_no = e.emp_no  WHERE emp_auth_id = ?";
   connection.query(sql, req.body.emp_auth_id, (err, user, fields) => {
     if (err) return res.json(err);
     if (!user)
@@ -56,11 +57,12 @@ app.post("/signin", (req, res) => {
     );
     if (isSame) {
       // 로그인 성공 토큰 생성 추후 config로 암호화 필요
-      let token = jwt.sign(user[0].emp_auth_id, "secretToken");
-      res.cookie("user", token).status(200).json({
-        loginSuccess: true,
-        userId: user[0].emp_auth_id,
-      });
+      // let token = jwt.sign(user[0].emp_auth_id, "secretToken");
+      // res.cookie("user", token).status(200).json({
+      //   loginSuccess: true,
+      //   userId: user[0].emp_auth_id,
+      // });
+      res.send(user);
     } else {
       return res.json({
         loginSuccess: false,
